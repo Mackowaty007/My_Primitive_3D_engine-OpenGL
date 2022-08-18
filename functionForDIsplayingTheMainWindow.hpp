@@ -21,10 +21,10 @@ void display(){
 		playerPos[2] -= cos(playerRot[0]+PI/2)*playerSpeed;
 	}
 	if (Keys.e==1){
-		playerPos[1]++;
+		playerPos[1] += playerSpeed;
 	}
 	if (Keys.q==1){
-		playerPos[1]--;
+		playerPos[1] -= playerSpeed;
 	}
 	if (Keys.j==1){
 		playerRot[0]+=0.1f;
@@ -50,14 +50,12 @@ void display(){
 		else{
 			angleToPoint[0] = atan((square[i][0]-playerPos[0])/(square[i][2]-playerPos[2]))+PI;
 		}
-
         if(square[i][1]-playerPos[1]>=0){
-            angleToPoint[1] = atan((square[i][0]-playerPos[0])/(square[i][1]-playerPos[1]));
+            angleToPoint[1] = atan((sqrt(pow(square[i][2]-playerPos[2],2)+pow(square[i][0]-playerPos[0],2)))/(square[i][1]-playerPos[1]));
         }
         else{
-            angleToPoint[1] = atan((square[i][0]-playerPos[0])/(square[i][1]-playerPos[1]))+PI;
+            angleToPoint[1] = atan((sqrt(pow(square[i][2]-playerPos[2],2)+pow(square[i][0]-playerPos[0],2)))/(square[i][1]-playerPos[1]))+PI;
         }
-		//std::cout<<angleToPoint[1]<<std::endl;
 
 		while(playerRot[0]>PI){
 			playerRot[0] -= 2*PI;
@@ -71,6 +69,19 @@ void display(){
 		while(angleToPoint[0]<-PI){
 			angleToPoint[0] += 2*PI;
 		}
+		while(playerRot[1]>PI){
+			playerRot[1] -= 2*PI;
+		}
+		while(playerRot[1]<-PI){
+			playerRot[1] += 2*PI;
+		}
+		while(angleToPoint[1]>PI){
+			angleToPoint[1] -= 2*PI;
+		}
+		while(angleToPoint[1]<-PI){
+			angleToPoint[1] += 2*PI;
+		}
+
 		angleDifference[0] = playerRot[0]-angleToPoint[0];
 		while(angleDifference[0]>PI){
 			angleDifference[0] -= 2*PI;
@@ -78,19 +89,18 @@ void display(){
 		while(angleDifference[0]<-PI){
 			angleDifference[0] += 2*PI;
 		}
-
-	
-		//std::cout << "x= " << playerPos[0] << " y= " << playerPos[2]<< " rotation = " << playerRot[0] << std::endl;
-		
-		if(i==8){
-			std::cout<< "playerRot  " << playerRot[0] << " angle = " << angleToPoint[0] << std::endl;
-			std::cout<< "rotation difference = " << angleDifference[0] << std::endl;
+		angleDifference[1] = playerRot[1]-angleToPoint[1];
+		while(angleDifference[1]>PI){
+			angleDifference[1] -= 2*PI;
 		}
-		
+		while(angleDifference[1]<-PI){
+			angleDifference[1] += 2*PI;
+		}
+
 		//complicated projection math
 		drawPolygons(
 			SCREEN_SIZE_X/2 + (angleDifference[0])*SCREEN_SIZE_X,
-			SCREEN_SIZE_Y/2// - (angleToPoint[1]-playerRot[1])*SCREEN_SIZE_Y
+			SCREEN_SIZE_Y/2 + (angleDifference[1])*SCREEN_SIZE_Y
 		);
 	}
 	//exit(0);
