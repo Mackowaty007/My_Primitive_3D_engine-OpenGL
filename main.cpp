@@ -3,83 +3,55 @@
 #include <math.h>
 #include <iostream>
 
-#define SCREEN_SIZE_X 700
-#define SCREEN_SIZE_Y 700
-#define POINT_SIZE 4
-#define PI 3.1415926535
+#define LEN(arr) ((int) (sizeof (arr) / sizeof (arr)[0]))
 
-float playerPos[3] = {0,0,0};
+#define SCREEN_WIDTH 700
+#define SCREEN_HEIGHT 700
+#define PI 3.1415926535
+#define POINT_SIZE 3
+#define LINE_WIDTH 4
+//smaller number - more FOV
+#define FOV 200
+#define DRAWING_DISTANCE 500
+
+#define DRAW_VERTECIES
+#define DRAW_LINES
+#define DRAW_FACES
+
+//#define DRAW_VERTECIES_FIXED
+//#define DRAW_LINES_FIXED
+//#define DRAW_FACES_FIXED
+
+float playerPos[3] = {0,0,-100};
+float cameraPos[3] = {0,0,0};
 float playerRot[2] = {0,PI/2};
 float playerSpeed = 1;
+float rotSpeed = 0.1;
 
-float square[9][3] = {{-10,-10,-10},{-10,-10,10},{-10,10,-10},{-10,10,10},{10,-10,-10},{10,-10,10},{10,10,-10},{10,10,10},{0,0,0}};
+#include "shape.h"
 
 typedef struct{
 	int w,a,d,s,e,q,j,l,i,k;
 }ButtonKeys; ButtonKeys Keys;
 
-
 #include "generalPurpouseFunctions.hpp"
 #include "functionForDIsplayingTheMainWindow.hpp"
-#include "functionForDisplayingADebugWindow.hpp"
-
-
-void init(){
-	glClearColor(0.3,0.5,0.4,0);
-	glColor3f(0.6,1.0,0.0);
-}
-
-
-void ButtonDown(unsigned char key,int x,int y)
-{
- if(key=='a'){ Keys.a=1;} 	
- if(key=='d'){ Keys.d=1;} 
- if(key=='w'){ Keys.w=1;}
- if(key=='s'){ Keys.s=1;}
- if(key=='e'){ Keys.e=1;}
- if(key=='q'){ Keys.q=1;}
- if(key=='j'){ Keys.j=1;}
- if(key=='l'){ Keys.l=1;}
- if(key=='i'){ Keys.i=1;}
- if(key=='k'){ Keys.k=1;}
- glutPostRedisplay();
-}
-
-void ButtonUp(unsigned char key,int x,int y)
-{
- if(key=='a'){ Keys.a=0;} 	
- if(key=='d'){ Keys.d=0;} 
- if(key=='w'){ Keys.w=0;}
- if(key=='s'){ Keys.s=0;}
- if(key=='e'){ Keys.e=0;}
- if(key=='q'){ Keys.q=0;}
- if(key=='j'){ Keys.j=0;}
- if(key=='l'){ Keys.l=0;}
- if(key=='i'){ Keys.i=0;}
- if(key=='k'){ Keys.k=0;}
- glutPostRedisplay();
-}
 
 int main(int argc, char* argv[]){
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 
-	glutInitWindowSize(SCREEN_SIZE_X,SCREEN_SIZE_Y);
-	glutInitWindowPosition( glutGet(GLUT_SCREEN_WIDTH)/2-SCREEN_SIZE_X/2 ,glutGet(GLUT_SCREEN_HEIGHT)/2-SCREEN_SIZE_Y/2 );
-	int windowMain = glutCreateWindow("platformer game");
-	gluOrtho2D(0,SCREEN_SIZE_X,SCREEN_SIZE_Y,0);
-
-	glutInitWindowSize(SCREEN_SIZE_X,SCREEN_SIZE_Y);
-	glutInitWindowPosition( glutGet(GLUT_SCREEN_WIDTH)/2-SCREEN_SIZE_X/2 ,glutGet(GLUT_SCREEN_HEIGHT)/2-SCREEN_SIZE_Y/2 );
-	int windowDebug = glutCreateWindow("debug Window");
-	gluOrtho2D(0,SCREEN_SIZE_X,SCREEN_SIZE_Y,0);
+	glutInitWindowSize(SCREEN_WIDTH,SCREEN_HEIGHT);
+	glutInitWindowPosition( glutGet(GLUT_SCREEN_WIDTH)/2-SCREEN_WIDTH/2 ,glutGet(GLUT_SCREEN_HEIGHT)/2-SCREEN_HEIGHT/2 );
+	int windowMain = glutCreateWindow("3d game");
+	gluOrtho2D(0,SCREEN_WIDTH,SCREEN_HEIGHT,0);
 
 	init();
+	setTheObjectScale();
+	decrementAllTheVerteciesValuesByOne();
 
 	glutSetWindow(windowMain);
 	glutDisplayFunc(display);
-	glutSetWindow(windowDebug);
-	glutDisplayFunc(displayDebugWindow);
 	//glutReshapeFunc(resize);
 	glutKeyboardFunc(ButtonDown);
 	glutKeyboardUpFunc(ButtonUp);
