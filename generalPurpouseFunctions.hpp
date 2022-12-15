@@ -1,13 +1,26 @@
 void init(){
 	glClearColor(0.0,0.1,0.1,0);
 
-	/*glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
   	glCullFace(GL_BACK);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glFrustum(-2, 2, -1.5, 1.5, 1, 40);
-	*/
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0, 0, 0);
+}
+
+float cutANumber(float number,float max,float min){
+	if (number>max){
+		number=max;
+	}
+	if (number<min){
+		number=min;
+	}
+	return number;
 }
 
 void drawSquare(float positionOnScreen[2]){
@@ -55,14 +68,22 @@ void drawPolygon(float x1,float y1,float x2,float y2,float x3,float y3,float x4,
 	glEnd();
 }
 
-float cutANumber(float number,float max,float min){
-	if (number>max){
-		number=max;
-	}
-	if (number<min){
-		number=min;
-	}
-	return number;
+//polygon with 3 sides but in 3D
+void drawPolygon3D(float x1,float y1,float z1,float x2,float y2,float z2,float x3,float y3,float z3){
+	glBegin(GL_POLYGON);
+	glVertex3f(x1,y1,z1);
+	glVertex3f(x2,y2,z2);
+	glVertex3f(x3,y3,z3);
+	glEnd();
+}
+//polygon with 4 sides but in 3D
+void drawPolygon3D(float x1,float y1,float z1,float x2,float y2,float z2,float x3,float y3,float z3,float x4,float y4,float z4){
+	glBegin(GL_POLYGON);
+	glVertex3f(x1,y1,z1);
+	glVertex3f(x2,y2,z2);
+	glVertex3f(x3,y3,z3);
+	glVertex3f(x4,y4,z4);
+	glEnd();
 }
 
 void ButtonDown(unsigned char key,int x,int y)
@@ -94,6 +115,61 @@ void ButtonUp(unsigned char key,int x,int y)
  if(key=='k'){ Keys.k=0;}
  glutPostRedisplay();
 }
+/*
+void special(int,int ,int){
+	if (Keys.w==1){
+		playerPos[0] += sin(playerRot[0])*playerSpeed;
+		//playerPos[1] += cos(playerRot[1])*playerSpeed;
+		playerPos[2] += cos(playerRot[0])*playerSpeed;
+		printf("works!");
+	}
+	if (Keys.s==1){
+		playerPos[0] -= sin(playerRot[0])*playerSpeed;
+		//playerPos[1] -= cos(playerRot[1])*playerSpeed;
+		playerPos[2] -= cos(playerRot[0])*playerSpeed;
+	}
+	if (Keys.a==1){
+		playerPos[0] += sin(playerRot[0]+PI/2)*playerSpeed;
+		playerPos[2] += cos(playerRot[0]+PI/2)*playerSpeed;
+	}
+	if (Keys.d==1){
+		playerPos[0] -= sin(playerRot[0]+PI/2)*playerSpeed;
+		playerPos[2] -= cos(playerRot[0]+PI/2)*playerSpeed;
+	}
+	if (Keys.e==1){
+		playerPos[1] += playerSpeed;
+	}
+	if (Keys.q==1){
+		playerPos[1] -= playerSpeed;
+	}
+	if (Keys.j==1){
+		playerRot[0]+=0.1f;
+	}
+	if (Keys.l==1){
+		playerRot[0]-=0.1f;
+	}
+	if (Keys.i==1){
+		playerRot[1]+=0.1f;
+	}
+	if (Keys.k==1){
+		playerRot[1]-=0.1f;
+	}
+	playerRot[1] = cutANumber(playerRot[1],PI,0);
+
+	if(playerRot[0]>PI){
+		playerRot[0] -= 2*PI;
+	}
+	if(playerRot[0]<-PI){
+		playerRot[0] += 2*PI;
+	}
+	if(playerRot[1]>PI){
+		playerRot[1] -= 2*PI;
+	}
+	if(playerRot[1]<0){
+		playerRot[1] += 2*PI;
+	}
+	glutPostRedisplay();
+}*/
 
 void setTheObjectScale(){
 	for (int i=0;i<LEN(vertecies);i++){

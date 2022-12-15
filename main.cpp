@@ -55,5 +55,6 @@ int main(int argc, char* argv[]){
 	//glutReshapeFunc(resize);
 	glutKeyboardFunc(ButtonDown);
 	glutKeyboardUpFunc(ButtonUp);
+	//glutSpecialFunc(special);
 	glutMainLoop();
 }
