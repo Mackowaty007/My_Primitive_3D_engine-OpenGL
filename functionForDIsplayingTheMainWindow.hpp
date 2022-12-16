@@ -1,11 +1,7 @@
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	cameraPos[0] = playerPos[0];
-	cameraPos[1] = playerPos[1];
-	cameraPos[2] = playerPos[2];
-
-	//keyboard interactions(WHY IS THIS IN THE DISPLAY FUNCTION? don't ask!)
+	glLoadIdentity();
+	
 	if (Keys.w==1){
 		playerPos[0] += sin(playerRot[0])*playerSpeed;
 		//playerPos[1] += cos(playerRot[1])*playerSpeed;
@@ -56,6 +52,14 @@ void display(){
 	if(playerRot[1]<0){
 		playerRot[1] += 2*PI;
 	}
+
+	cameraPos[0] = playerPos[0];
+	cameraPos[1] = playerPos[1];
+	cameraPos[2] = playerPos[2];
+
+	gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
+            0, 0, 0,
+            0.0, 1.0, 0.0);
 
 	//draw vertexes
     //declaring usefull variables (they calculate the angle from the players view to vertexes)
@@ -118,6 +122,29 @@ void display(){
 			}
 		}
 
+		#ifdef DRAW_FACES_FIXED
+		float distanceToPolygon = -sqrt(pow(cameraPos[0]-vertecies[polygons[i][currentVertecie]][0],2) + pow(cameraPos[1]-vertecies[polygons[i][currentVertecie]][1],2) + pow(cameraPos[2]-vertecies[polygons[i][currentVertecie]][2],2));
+		//fun with colors
+		//glColor3f(i/(float)LEN(polygons),i/(float)LEN(polygons),i/(float)LEN(polygons));
+		glColor3f(1+distanceToPolygon/DRAWING_DISTANCE,1+distanceToPolygon/DRAWING_DISTANCE,1+distanceToPolygon/DRAWING_DISTANCE);
+		//if the polygon has 4 sides draw another triangle
+		if (polygons[i][3] != -1){
+			drawPolygon3D(
+				vertecies[polygons[i][0]][0],vertecies[polygons[i][0]][1],vertecies[polygons[i][0]][2],
+				vertecies[polygons[i][1]][0],vertecies[polygons[i][1]][1],vertecies[polygons[i][1]][2],
+				vertecies[polygons[i][2]][0],vertecies[polygons[i][2]][1],vertecies[polygons[i][2]][2],
+				vertecies[polygons[i][3]][0],vertecies[polygons[i][3]][1],vertecies[polygons[i][3]][2]
+			);
+		}
+		else{
+			drawPolygon3D(
+				vertecies[polygons[i][0]][0],vertecies[polygons[i][0]][1],vertecies[polygons[i][0]][2],
+				vertecies[polygons[i][1]][0],vertecies[polygons[i][1]][1],vertecies[polygons[i][1]][2],
+				vertecies[polygons[i][2]][0],vertecies[polygons[i][2]][1],vertecies[polygons[i][2]][2]
+			);
+		}
+		#endif
+
 		#ifdef DRAW_FACES
 		//check if the face should be culled or not
 		double result = atan2(angleDifference[2][1] - angleDifference[0][1], angleDifference[2][0] - angleDifference[0][0]) - atan2(angleDifference[1][1] - angleDifference[0][1], angleDifference[1][0] - angleDifference[0][0]);
@@ -133,7 +160,7 @@ void display(){
 
 			//fun with colors
 			//glColor3f(i/(float)LEN(polygons),i/(float)LEN(polygons),i/(float)LEN(polygons));
-			glColor3f(1+distanceToPolygon/DRAWING_DISTANCE,1+distanceToPolygon/DRAWING_DISTANCE,1+distanceToPolygon/DRAWING_DISTANCE);
+			//glColor3f(1+distanceToPolygon/DRAWING_DISTANCE,1+distanceToPolygon/DRAWING_DISTANCE,1+distanceToPolygon/DRAWING_DISTANCE);
 
 			//if the polygon has 4 sides draw another triangle
 			if (polygons[i][3] != -1){
@@ -191,14 +218,11 @@ void display(){
 		#ifdef DRAW_VERTECIES
 		glColor3f(0.1,0.2,0.5);
 		drawSquare(
-			SCREEN_WIDTH/2 + (angleDifference[0][0])*(SCREEN_WIDTH/SCREEN_HEIGHT)*FOV,
+			SCREEN_WIDTH/2  + (angleDifference[0][0])*(SCREEN_WIDTH/SCREEN_HEIGHT)*FOV,
 			SCREEN_HEIGHT/2 + (angleDifference[0][1])*(SCREEN_WIDTH/SCREEN_HEIGHT)*FOV);
 		#endif
-
-		//#ifdef DRAW_VERTECIES_FIXED
-		//glColor3f(0.1,0.2,0.5);
 	}
-	//exit(0);
+
 	glutPostRedisplay();
 	glutSwapBuffers();
 }
