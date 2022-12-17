@@ -12,20 +12,23 @@
 #define LINE_WIDTH 4
 //smaller number - more FOV
 #define FOV 200
-#define DRAWING_DISTANCE 500
+#define DRAWING_DISTANCE 100
+//game constants
+#define DEFAULT_PLAYER_SPEED 0.1
+#define DEFAULT_RUNNING_SPEED 0.5
 
-#define DRAW_VERTECIES
-#define DRAW_LINES
-#define DRAW_FACES
+//#define DRAW_VERTECIES
+//#define DRAW_LINES
+//#define DRAW_FACES
 
 //#define DRAW_VERTECIES_FIXED
 //#define DRAW_LINES_FIXED
-//#define DRAW_FACES_FIXED
+#define DRAW_FACES_FIXED
 
-float playerPos[3] = {0,0,-100};
+float playerPos[3] = {0,0,0};
 float cameraPos[3] = {0,0,0};
 float playerRot[2] = {0,PI/2};
-float playerSpeed = 1;
+float playerSpeed = DEFAULT_PLAYER_SPEED;
 float rotSpeed = 0.1;
 
 #include "shape.h"
