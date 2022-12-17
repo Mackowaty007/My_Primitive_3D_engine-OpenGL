@@ -115,13 +115,13 @@ void ButtonUp(unsigned char key,int x,int y)
  if(key=='k'){ Keys.k=0;}
  glutPostRedisplay();
 }
-/*
-void special(int key,int ,int){
+
+void Input(){
+	//keyboard stuff
 	if (Keys.w==1){
 		playerPos[0] += sin(playerRot[0])*playerSpeed;
 		//playerPos[1] += cos(playerRot[1])*playerSpeed;
 		playerPos[2] += cos(playerRot[0])*playerSpeed;
-		printf("works!");
 	}
 	if (Keys.s==1){
 		playerPos[0] -= sin(playerRot[0])*playerSpeed;
@@ -168,9 +168,16 @@ void special(int key,int ,int){
 	if(playerRot[1]<0){
 		playerRot[1] += 2*PI;
 	}
-	glutPostRedisplay();
-}*/
 
+	//mouse stuff
+	glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);//GLUT_CURSOR_NONE
+	glutWarpPointer(SCREEN_WIDTH/2,SCREEN_HEIGHT/2);//THIS DOESN'T WORK BECAUSE WAYLAND DOESN'T SUPPORT WARPING THE CURSOR!!! 
+}
+/*
+void special(int,int ,int){
+	printf("works");
+}
+*/
 void setTheObjectScale(){
 	for (int i=0;i<LEN(vertecies);i++){
 		for (int c=0;c<LEN(vertecies[0]);c++){

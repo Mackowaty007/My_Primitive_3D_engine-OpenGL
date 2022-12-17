@@ -12,7 +12,10 @@
 #define LINE_WIDTH 4
 //smaller number - more FOV
 #define FOV 200
-#define DRAWING_DISTANCE 50
+#define DRAWING_DISTANCE 100
+//game constants
+#define DEFAULT_PLAYER_SPEED 0.1
+#define DEFAULT_RUNNING_SPEED 0.5
 
 //#define DRAW_VERTECIES
 //#define DRAW_LINES
@@ -25,7 +28,7 @@
 float playerPos[3] = {0,0,0};
 float cameraPos[3] = {0,0,0};
 float playerRot[2] = {0,PI/2};
-float playerSpeed = 0.1;
+float playerSpeed = DEFAULT_PLAYER_SPEED;
 float rotSpeed = 0.1;
 
 #include "shape.h"
@@ -47,7 +50,7 @@ int main(int argc, char* argv[]){
 	gluOrtho2D(0,SCREEN_WIDTH,SCREEN_HEIGHT,0);
 
 	init();
-	//setTheObjectScale();
+	setTheObjectScale();
 	decrementAllTheVerteciesValuesByOne();
 
 	glutSetWindow(windowMain);
